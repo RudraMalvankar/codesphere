@@ -66,7 +66,7 @@ const Project = () => {
 
     }
 
-    const send = () => {
+    const send = () => { scrollToBottom()
 
         sendMessage('project-message', {
             message,
@@ -151,6 +151,10 @@ const Project = () => {
     //     messsageBox.appendChild(message)
 
     // }
+
+    function scrollToBottom() {
+        messageBox.current.scrollTop = messageBox.current.scrollHeight
+    }
 
     return (
         <main className='h-screen w-screen flex'>
