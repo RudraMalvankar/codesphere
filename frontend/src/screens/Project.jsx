@@ -3,7 +3,8 @@ import { UserContext } from '../context/UserContext'
 import {  useLocation } from 'react-router-dom'
 import axios from '../config/axios'
 import { initializeSocket, receiveMessage, sendMessage } from '../config/socket'
-// import Markdown from 'markdown-to-jsx'
+
+import Markdown from 'markdown-to-jsx'
 // import hljs from 'highlight.js';
 // import { getWebContainer } from '../config/webcontainer'
 
@@ -77,11 +78,31 @@ const Project = () => {
 
     }
 
+    function WriteAiMessage(message) {
+
+        const messageObject = JSON.parse(message)
+
+        return (
+            <div
+                className='overflow-auto bg-slate-950 text-white rounded-sm p-2'
+            >
+                <Markdown
+                    options={{
+                        // overrides: {
+                        //     code: SyntaxHighlightedCode,
+                        // },
+                    }}
+                >
+                    {messageObject.text}
+                </Markdown>
+            </div>)
+    }
     
 
     useEffect(() => {
 
         initializeSocket(project._id)
+        
 
         
 
@@ -177,7 +198,9 @@ const Project = () => {
                             <div key={index} className={`${msg.sender._id === 'ai' ? 'max-w-80' : 'max-w-52'} ${msg.sender._id == user._id.toString() && 'ml-auto'}  message flex flex-col p-2 bg-slate-50 w-fit rounded-md`}>
                                 <small className='opacity-65 text-xs'>{msg.sender.email}</small>
                                 <div className='text-sm'>
-                                    {msg.message}
+                                    {msg.sender._id === 'ai' ?
+                                        WriteAiMessage(msg.message)
+                                        : <p>{msg.message}</p>}
                                 </div>
                             </div>
                         ))}
